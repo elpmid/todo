@@ -19,13 +19,13 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<TodoDomain> findAllTodos() {
-        return todoDAO.findAll();
+    public Optional<TodoDomain> findTodoById(UUID id) {
+        return todoDAO.findOneById(id);
     }
 
     @Override
-    public Optional<TodoDomain> findTodoById(UUID id) {
-        return todoDAO.findOneById(id);
+    public List<TodoDomain> findAllTodos() {
+        return todoDAO.findAll();
     }
 
     @Override
@@ -36,6 +36,5 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void deleteTodoById(UUID id) {
         todoDAO.deleteById(id);
-
     }
 }

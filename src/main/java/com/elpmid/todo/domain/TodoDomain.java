@@ -1,5 +1,7 @@
 package com.elpmid.todo.domain;
 
+import com.elpmid.todo.dto.TodoStatus;
+
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
@@ -10,12 +12,14 @@ public class TodoDomain {
     private String name;
     private String description;
     private LocalDate dueDate;
+    private TodoStatus status;
 
-    public TodoDomain(UUID id, String name, String description, LocalDate dueDate) {
+    public TodoDomain(UUID id, String name, String description, LocalDate dueDate, TodoStatus status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -48,6 +52,14 @@ public class TodoDomain {
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public TodoStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TodoStatus status) {
+        this.status = status;
     }
 
     @Override

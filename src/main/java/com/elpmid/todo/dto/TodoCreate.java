@@ -9,12 +9,14 @@ public class TodoCreate {
     private String name;
     private String description;
     private LocalDate dueDate;
+    private TodoStatus status;
 
-    public TodoCreate(UUID id, String name, String description, LocalDate dueDate) {
+    public TodoCreate(UUID id, String name, String description, LocalDate dueDate, TodoStatus status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -49,4 +51,11 @@ public class TodoCreate {
         this.dueDate = dueDate;
     }
 
+    public TodoStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TodoStatus status) {
+        this.status = status;
+    }
 }

@@ -6,6 +6,8 @@ import com.elpmid.todo.dto.TodoResource;
 import com.elpmid.todo.dto.TodoUpdate;
 import org.springframework.stereotype.Service;
 
+// I decided to make this a spring bean incase latter we need to inject another service
+
 @Service
 public class TodoMappingServiceImpl implements TodoMappingService {
 
@@ -17,7 +19,8 @@ public class TodoMappingServiceImpl implements TodoMappingService {
                 todoDomain.getId(),
                 todoDomain.getName(),
                 todoDomain.getDescription(),
-                todoDomain.getDueDate()
+                todoDomain.getDueDate(),
+                todoDomain.getStatus()
         );
     }
 
@@ -27,7 +30,8 @@ public class TodoMappingServiceImpl implements TodoMappingService {
                 todoCreate.getId(),
                 todoCreate.getName(),
                 todoCreate.getDescription(),
-                todoCreate.getDueDate()
+                todoCreate.getDueDate(),
+                todoCreate.getStatus()
         );
     }
 
@@ -36,6 +40,7 @@ public class TodoMappingServiceImpl implements TodoMappingService {
         todoDomain.setName(todoUpdate.getName());
         todoDomain.setDescription(todoUpdate.getDescription());
         todoDomain.setDueDate(todoUpdate.getDueDate());
+        todoDomain.setStatus(todoUpdate.getStatus());
         return todoDomain;
     }
 

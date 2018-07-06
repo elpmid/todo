@@ -1,6 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '2.0.3.RELEASE'
+        mockitoVersion = '2.18.3'
     }
     repositories {
         mavenCentral()
@@ -25,6 +26,9 @@ repositories {
 
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile("org.springframework.boot:spring-boot-starter-web")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.mockito:mockito-core:$mockitoVersion")
+    testCompile("org.mockito:mockito-junit-jupiter:$mockitoVersion")
+    testCompile("org.hamcrest:hamcrest-all:1.3")
 }

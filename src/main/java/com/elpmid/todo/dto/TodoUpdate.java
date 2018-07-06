@@ -6,11 +6,13 @@ public class TodoUpdate {
     private String name;
     private String description;
     private LocalDate dueDate;
+    private TodoStatus status;
 
-    public TodoUpdate(String name, String description, LocalDate dueDate) {
+    public TodoUpdate(String name, String description, LocalDate dueDate, TodoStatus status) {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
+        this.status = status;
     }
 
     public String getName() {
@@ -37,4 +39,11 @@ public class TodoUpdate {
         this.dueDate = dueDate;
     }
 
+    public TodoStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TodoStatus status) {
+        this.status = status;
+    }
 }
