@@ -11,14 +11,18 @@ import java.util.UUID;
 
 public class TodoDTOFactory {
 
-    public static TodoCreate createTodoCreate() {
+    public static TodoCreate createTodoCreate(UUID id) {
         return new TodoCreate(
-                UUID.randomUUID(),
+                id,
                 "Name",
                 "Description",
                 LocalDate.now().plusDays(1),
                 CommonFactory.randomTodoStatus()
         );
+    }
+
+    public static TodoCreate createTodoCreate() {
+        return createTodoCreate(UUID.randomUUID());
     }
 
     public static TodoUpdate createTodoUpdate() {

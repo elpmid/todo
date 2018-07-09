@@ -134,6 +134,23 @@ public class TodoControllerIntegrationTest {
     }
 
     @Test
+    public void createTodo_already_exists() throws Exception {
+
+        TodoDomain todoDomain = TodoDomainFactory.createTodoDomain();
+        todoService.saveTodo(todoDomain);
+
+        TodoCreate todoCreate = TodoDTOFactory.createTodoCreate(todoDomain.getId());
+
+        mockMvc.perform(post("/api/todo/")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(convertObjectToJsonBytes(todoCreate)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.errorMessage", equalTo("Unable to create Todo with id " + todoDomain.getId() + ". It already exists.")));
+
+    }
+
+    @Test
     public void createTodo_mandatory_fields() throws Exception {
 
         TodoCreate todoCreate = TodoDTOFactory.createTodoCreate();

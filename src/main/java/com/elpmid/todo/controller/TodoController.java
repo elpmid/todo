@@ -73,6 +73,13 @@ public class TodoController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<TodoResource> createTodo(@Valid @RequestBody TodoCreate todoCreate) {
+        Optional<TodoDomain> todoDomainOptional = todoService.findTodoById(todoCreate.getId());
+        if (todoDomainOptional.isPresent()) {
+            return new ResponseEntity(
+                    new Error("Unable to create Todo with id " + todoCreate.getId().toString() + ". It already exists."),
+                    HttpStatus.CONFLICT
+            );
+        }
         TodoDomain todoDomain = todoMappingService.createTodoDomain(todoCreate);
         todoDomain = todoService.saveTodo(todoDomain);
         return new ResponseEntity(todoDomain, HttpStatus.CREATED);
