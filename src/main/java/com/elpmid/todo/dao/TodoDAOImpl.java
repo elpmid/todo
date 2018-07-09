@@ -32,7 +32,7 @@ public class TodoDAOImpl implements TodoDAO {
     public Optional<TodoDomain> findOneById(UUID id) {
         ConcurrentMapCache concurrentMapCache = (ConcurrentMapCache) cacheManager.getCache("todos");
         TodoDomain todo = (TodoDomain) concurrentMapCache.getNativeCache().get(id);
-        return Optional.of(todo);
+        return Optional.ofNullable(todo);
     }
 
     @Override
@@ -45,4 +45,11 @@ public class TodoDAOImpl implements TodoDAO {
     @CacheEvict(key = "#id")
     public void deleteById(UUID id) {
     }
+
+    @Override
+    @CacheEvict(allEntries=true)
+    public void deleteAll() {
+    }
+
+
 }

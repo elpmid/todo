@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.4")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.mockito:mockito-core:$mockitoVersion")
     testCompile("org.mockito:mockito-junit-jupiter:$mockitoVersion")

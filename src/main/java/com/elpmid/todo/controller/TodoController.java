@@ -10,11 +10,14 @@ import com.elpmid.todo.service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import javax.validation.Valid;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
         consumes = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
         produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8"
 )
+@CrossOrigin
 public class TodoController {
 
     private final TodoService todoService;
@@ -41,6 +45,7 @@ public class TodoController {
     // It would also support returning multiple business exceptions instead of the one limited to below
     // Also the message would not be hardcoded it would be read from a properties file
     // This would also allow the mappings to be done in the service
+    // Finally the JSR303 exceptions would also be handled by it.
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<TodoResource> getTodoById(@PathVariable("id") UUID id) {
@@ -50,7 +55,7 @@ public class TodoController {
             return new ResponseEntity(todoResponseDTO, HttpStatus.OK);
         } else {
             return new ResponseEntity(
-                    new Error("Unable to get, Todo with id " + id + " not found."),
+                    new Error("Unable to get Todo with id " + id + ". It was not found."),
                     HttpStatus.NOT_FOUND
             );
         }
@@ -67,19 +72,19 @@ public class TodoController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<TodoResource> createTodo(@RequestBody TodoCreate todoCreate) {
+    public ResponseEntity<TodoResource> createTodo(@Valid @RequestBody TodoCreate todoCreate) {
         TodoDomain todoDomain = todoMappingService.createTodoDomain(todoCreate);
-        todoDomain =todoService.saveTodo(todoDomain);
+        todoDomain = todoService.saveTodo(todoDomain);
         return new ResponseEntity(todoDomain, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<TodoResource> updateTodo(@PathVariable("id") UUID id, @RequestBody TodoUpdate todoUpdate) {
+    public ResponseEntity<TodoResource> updateTodo(@PathVariable("id") UUID id, @Valid @RequestBody TodoUpdate todoUpdate) {
         Optional<TodoDomain> todoDomainOptional = todoService.findTodoById(id);
 
         if (!todoDomainOptional.isPresent()) {
             return new ResponseEntity(
-                    new Error("Unable to update. Todo with id " + id + " not found."),
+                    new Error("Unable to update Todo with id " + id + ". It was not found."),
                     HttpStatus.NOT_FOUND
             );
         }
@@ -97,11 +102,25 @@ public class TodoController {
 
         if (!todoDomainOptional.isPresent()) {
             return new ResponseEntity(
-                    new Error("Unable to delete. Todo with id " + id + " not found."),
+                    new Error("Unable to delete Todo with id " + id + ". It was not found."),
                     HttpStatus.NOT_FOUND);
         }
         todoService.deleteTodoById(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Error processValidationError(MethodArgumentNotValidException ex) {
+        BindingResult result = ex.getBindingResult();
+        List<FieldError> fieldErrors = new ArrayList<>(result.getFieldErrors());
+        fieldErrors.sort(Comparator.comparing(FieldError::getField));
+        String errorsJoined = fieldErrors.stream().map(
+              fieldError -> "Field error in object '" + fieldError.getObjectName() + "' on field '" + fieldError.getField() +
+                      "': rejected value [" + ObjectUtils.nullSafeToString(fieldError.getRejectedValue()) + "]"
+        ).collect(Collectors.joining(";"));
+        return new Error(errorsJoined);
     }
 
 }

@@ -23,10 +23,10 @@ public class TodoDTOFactory {
 
     public static TodoUpdate createTodoUpdate() {
         return new TodoUpdate(
-                "Name",
-                "Description",
+                "Update",
+                "Update",
                 LocalDate.now().plusDays(1),
-                CommonFactory.randomTodoStatus()
+                TodoStatus.DONE
         );
     }
 

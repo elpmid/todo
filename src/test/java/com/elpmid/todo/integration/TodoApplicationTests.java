@@ -1,4 +1,4 @@
-package com.elpmid.todo;
+package com.elpmid.todo.integration;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

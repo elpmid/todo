@@ -11,6 +11,10 @@ public class TodoResource {
     private LocalDate dueDate;
     private TodoStatus status;
 
+    public TodoResource() {
+        super();
+    }
+
     public TodoResource(UUID id, String name, String description, LocalDate dueDate, TodoStatus status) {
         this.id = id;
         this.name = name;

@@ -1,15 +1,25 @@
 package com.elpmid.todo.dto;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.UUID;
 
 public class TodoCreate {
 
+    @NotNull
     private UUID id;
+    @NotNull
     private String name;
+    @NotNull
     private String description;
+    @NotNull
     private LocalDate dueDate;
+    @NotNull
     private TodoStatus status;
+
+    public TodoCreate() {
+        super();
+    }
 
     public TodoCreate(UUID id, String name, String description, LocalDate dueDate, TodoStatus status) {
         this.id = id;

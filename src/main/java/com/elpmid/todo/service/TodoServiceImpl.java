@@ -14,7 +14,7 @@ public class TodoServiceImpl implements TodoService {
 
     private final TodoDAO todoDAO;
 
-    public TodoServiceImpl(TodoDAO todoDAO, TodoMappingService todoMappingService) {
+    public TodoServiceImpl(TodoDAO todoDAO) {
         this.todoDAO = todoDAO;
     }
 
@@ -37,4 +37,10 @@ public class TodoServiceImpl implements TodoService {
     public void deleteTodoById(UUID id) {
         todoDAO.deleteById(id);
     }
+
+    @Override
+    public void deleteAllTodos() {
+        todoDAO.deleteAll();
+    }
+
 }

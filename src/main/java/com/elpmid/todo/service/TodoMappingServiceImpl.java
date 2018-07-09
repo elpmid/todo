@@ -44,5 +44,4 @@ public class TodoMappingServiceImpl implements TodoMappingService {
         return todoDomain;
     }
 
-
 }

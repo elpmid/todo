@@ -99,11 +99,19 @@ class TodoServiceUnitTest {
     void testDeleteTodoById() {
         UUID id = UUID.randomUUID();
         ArgumentCaptor<UUID> argument = ArgumentCaptor.forClass(UUID.class);
-        todoDAO.deleteById(id);
+        todoService.deleteTodoById(id);
         verify(todoDAO).deleteById(argument.capture());
         assertThat(argument.getValue(), equalTo(id));
 
         verify(todoDAO).deleteById(id);
+        verifyNoMoreInteractions(todoDAO);
+    }
+
+    @Test
+    void deleteAllTodos() {
+        todoService.deleteAllTodos();
+
+        verify(todoDAO).deleteAll();
         verifyNoMoreInteractions(todoDAO);
     }
 

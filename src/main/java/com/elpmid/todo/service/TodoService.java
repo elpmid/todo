@@ -16,4 +16,6 @@ public interface TodoService {
     TodoDomain saveTodo(TodoDomain todoDomain);
 
     void deleteTodoById(UUID id);
+
+    void deleteAllTodos();
 }

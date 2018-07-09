@@ -15,4 +15,6 @@ public interface TodoDAO {
     TodoDomain save(TodoDomain todo);
 
     void deleteById(UUID id);
+
+    void deleteAll();
 }
