@@ -3,6 +3,7 @@ package com.elpmid.todo.service;
 
 import com.elpmid.todo.dao.TodoDAO;
 import com.elpmid.todo.domain.TodoDomain;
+import com.elpmid.todo.dto.TodoQueryStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<TodoDomain> findAllTodos() {
-        return todoDAO.findAll();
+    public List<TodoDomain> findAllTodos(TodoQueryStatus status) {
+        return todoDAO.findAll(status);
     }
 
     @Override

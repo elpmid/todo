@@ -2,6 +2,7 @@ package com.elpmid.todo.unit;
 
 import com.elpmid.todo.dao.TodoDAO;
 import com.elpmid.todo.domain.TodoDomain;
+import com.elpmid.todo.dto.TodoQueryStatus;
 import com.elpmid.todo.factory.CommonFactory;
 import com.elpmid.todo.factory.TodoDomainFactory;
 import com.elpmid.todo.service.TodoServiceImpl;
@@ -68,12 +69,12 @@ class TodoServiceUnitTest {
                         CommonFactory.randomTodoStatus()
                         )
                 ).collect(Collectors.toList());
-        when(todoDAO.findAll()).thenReturn(todoDomainsExpected);
+        when(todoDAO.findAll(any())).thenReturn(todoDomainsExpected);
 
-        List<TodoDomain> todoDomainsActual = todoService.findAllTodos();
+        List<TodoDomain> todoDomainsActual = todoService.findAllTodos(TodoQueryStatus.ALL);
         assertThat(todoDomainsActual.size(), equalTo(todoDomainsExpected.size()));
 
-        verify(todoDAO).findAll();
+        verify(todoDAO).findAll(any());
         verifyNoMoreInteractions(todoDAO);
     }
 

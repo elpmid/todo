@@ -1,10 +1,8 @@
 package com.elpmid.todo.controller;
 
 import com.elpmid.todo.domain.TodoDomain;
+import com.elpmid.todo.dto.*;
 import com.elpmid.todo.dto.Error;
-import com.elpmid.todo.dto.TodoCreate;
-import com.elpmid.todo.dto.TodoUpdate;
-import com.elpmid.todo.dto.TodoResource;
 import com.elpmid.todo.service.TodoMappingService;
 import com.elpmid.todo.service.TodoService;
 import org.springframework.http.HttpStatus;
@@ -62,8 +60,8 @@ public class TodoController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ResponseEntity<List<TodoResource>> getAllTodos() {
-        List<TodoDomain> todoDomains = todoService.findAllTodos();
+    public ResponseEntity<List<TodoResource>> getAllTodos(@RequestParam(value = "status", defaultValue = "ALL") TodoQueryStatus status) {
+        List<TodoDomain> todoDomains = todoService.findAllTodos(status);
         if (!todoDomains.isEmpty()) {
             List<TodoResource> todoResponseDTOs = todoDomains.stream().map(todoMappingService::todoDomainToTodoResource).collect(Collectors.toList());
             return new ResponseEntity<>(todoResponseDTOs, HttpStatus.OK);
@@ -74,6 +72,8 @@ public class TodoController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<TodoResource> createTodo(@Valid @RequestBody TodoCreate todoCreate) {
         Optional<TodoDomain> todoDomainOptional = todoService.findTodoById(todoCreate.getId());
+        // There is a race condition here - but as this api has not been design for multi user, this will suffice
+        // If I was designing for multi user would go optimistic locking with a version on the domain object.
         if (todoDomainOptional.isPresent()) {
             return new ResponseEntity(
                     new Error("Unable to create Todo with id " + todoCreate.getId().toString() + ". It already exists."),

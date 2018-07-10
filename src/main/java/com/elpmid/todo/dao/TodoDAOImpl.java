@@ -1,6 +1,8 @@
 package com.elpmid.todo.dao;
 
 import com.elpmid.todo.domain.TodoDomain;
+import com.elpmid.todo.dto.TodoQueryStatus;
+import com.elpmid.todo.dto.TodoStatus;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -12,7 +14,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-@CacheConfig(cacheNames = {"todos"})
 public class TodoDAOImpl implements TodoDAO {
 
     private final CacheManager cacheManager;
@@ -22,10 +23,22 @@ public class TodoDAOImpl implements TodoDAO {
     }
 
     @Override
-    public List<TodoDomain> findAll() {
+    public List<TodoDomain> findAll(TodoQueryStatus status) {
         ConcurrentMapCache concurrentMapCache = (ConcurrentMapCache) cacheManager.getCache("todos");
         Set<Map.Entry<Object, Object>> concurrentHashMap = concurrentMapCache.getNativeCache().entrySet();
-        return concurrentHashMap.stream().map(entry -> (TodoDomain) entry.getValue()).collect(Collectors.toList());
+        List<TodoDomain> todoDomains = concurrentHashMap.stream().map(entry -> (TodoDomain) entry.getValue()).collect(Collectors.toList());
+        switch (status) {
+            case DONE:
+                return todoDomains.stream().filter(todoDomain -> todoDomain.getStatus() == TodoStatus.DONE)
+                        .sorted(Comparator.comparing(TodoDomain::getName, String.CASE_INSENSITIVE_ORDER))
+                        .collect(Collectors.toList());
+            case PENDING:
+                return todoDomains.stream().filter(todoDomain -> todoDomain.getStatus() == TodoStatus.PENDING)
+                        .sorted(Comparator.comparing(TodoDomain::getName, String.CASE_INSENSITIVE_ORDER))
+                        .collect(Collectors.toList());
+            default:
+                return todoDomains.stream().sorted(Comparator.comparing(TodoDomain::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+        }
     }
 
     @Override
@@ -36,18 +49,18 @@ public class TodoDAOImpl implements TodoDAO {
     }
 
     @Override
-    @Cacheable(key = "#todo.id")
+    @Cacheable(cacheNames = {"todos"}, key = "#todo.id")
     public TodoDomain save(TodoDomain todo) {
         return todo;
     }
 
     @Override
-    @CacheEvict(key = "#id")
+    @CacheEvict(cacheNames = {"todos"}, key = "#id")
     public void deleteById(UUID id) {
     }
 
     @Override
-    @CacheEvict(allEntries=true)
+    @CacheEvict(cacheNames = {"todos"}, allEntries = true)
     public void deleteAll() {
     }
 

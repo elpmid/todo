@@ -3,6 +3,8 @@ package com.elpmid.todo.integration;
 import com.elpmid.todo.TodoApplication;
 import com.elpmid.todo.domain.TodoDomain;
 import com.elpmid.todo.dto.TodoCreate;
+import com.elpmid.todo.dto.TodoQueryStatus;
+import com.elpmid.todo.dto.TodoStatus;
 import com.elpmid.todo.dto.TodoUpdate;
 import com.elpmid.todo.factory.TodoDTOFactory;
 import com.elpmid.todo.factory.TodoDomainFactory;
@@ -98,6 +100,36 @@ public class TodoControllerIntegrationTest {
                 .andExpect(content().string(containsString("\"id\":\"" + todoDomain1.getId().toString() + "\"")))
                 .andExpect(content().string(containsString("\"id\":\"" + todoDomain2.getId().toString() + "\"")));
     }
+
+    @Test
+    public void getAllTodos_status() throws Exception {
+
+        TodoDomain todoDomain1 = TodoDomainFactory.createTodoDomain();
+        todoDomain1.setStatus(TodoStatus.PENDING);
+        todoService.saveTodo(todoDomain1);
+
+        TodoDomain todoDomain2 = TodoDomainFactory.createTodoDomain();
+        todoDomain2.setStatus(TodoStatus.DONE);
+        todoService.saveTodo(todoDomain2);
+
+        mockMvc.perform(get("/api/todo/")
+                .param("status", "PENDING")
+                .contentType(APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(content().string(containsString("\"id\":\"" + todoDomain1.getId().toString() + "\"")));
+
+        mockMvc.perform(get("/api/todo/")
+                .param("status", "DONE")
+                .contentType(APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(content().string(containsString("\"id\":\"" + todoDomain2.getId().toString() + "\"")));
+
+    }
+
 
     @Test
     public void getAllTodos_none_created() throws Exception {
