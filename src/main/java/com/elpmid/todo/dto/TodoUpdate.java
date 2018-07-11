@@ -1,12 +1,13 @@
 package com.elpmid.todo.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class TodoUpdate {
-    @NotNull
+    @NotBlank
     private String name;
-    @NotNull
+    @NotBlank
     private String description;
     @NotNull
     private LocalDate dueDate;

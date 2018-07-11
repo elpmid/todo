@@ -3,7 +3,6 @@ package com.elpmid.todo.integration;
 import com.elpmid.todo.TodoApplication;
 import com.elpmid.todo.domain.TodoDomain;
 import com.elpmid.todo.dto.TodoCreate;
-import com.elpmid.todo.dto.TodoQueryStatus;
 import com.elpmid.todo.dto.TodoStatus;
 import com.elpmid.todo.dto.TodoUpdate;
 import com.elpmid.todo.factory.TodoDTOFactory;

@@ -1,6 +1,5 @@
 package com.elpmid.todo.service;
 
-
 import com.elpmid.todo.dao.TodoDAO;
 import com.elpmid.todo.domain.TodoDomain;
 import com.elpmid.todo.dto.TodoQueryStatus;

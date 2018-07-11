@@ -4,7 +4,6 @@ import com.elpmid.todo.domain.TodoDomain;
 import com.elpmid.todo.dto.TodoStatus;
 
 import java.time.LocalDate;
-import java.util.Random;
 import java.util.UUID;
 
 public class TodoDomainFactory {
