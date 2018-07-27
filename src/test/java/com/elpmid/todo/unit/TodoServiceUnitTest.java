@@ -3,6 +3,7 @@ package com.elpmid.todo.unit;
 import com.elpmid.todo.dao.TodoDAO;
 import com.elpmid.todo.domain.TodoDomain;
 import com.elpmid.todo.dto.TodoQueryStatus;
+import com.elpmid.todo.dto.TodoResource;
 import com.elpmid.todo.factory.CommonFactory;
 import com.elpmid.todo.factory.TodoDomainFactory;
 import com.elpmid.todo.service.TodoServiceImpl;
@@ -25,10 +26,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-// These unit tests are not worth much at this stage but usually you will have
-// business logic in the service so good to start them
-// Also good to have for when proper exception handling is introduced.
-
 @ExtendWith(MockitoExtension.class)
 class TodoServiceUnitTest {
 
@@ -46,7 +43,7 @@ class TodoServiceUnitTest {
 
         when(todoDAO.findOneById(any())).thenReturn(todoDomainOptionalExpected);
 
-        Optional<TodoDomain> todoDomainOptionalActual = todoService.findTodoById(id);
+        Optional<TodoDomain> todoDomainOptionalActual = todoDAO.findOneById(id);
         assertThat(todoDomainOptionalActual.isPresent(), equalTo(true));
         TodoDomain todoDomainActual = todoDomainOptionalActual.get();
         assertThat(todoDomainActual.getId(), equalTo(id));
@@ -71,8 +68,8 @@ class TodoServiceUnitTest {
                 ).collect(Collectors.toList());
         when(todoDAO.findAll(any())).thenReturn(todoDomainsExpected);
 
-        List<TodoDomain> todoDomainsActual = todoService.findAllTodos(TodoQueryStatus.ALL);
-        assertThat(todoDomainsActual.size(), equalTo(todoDomainsExpected.size()));
+        List<TodoResource> todoResourcesActual = todoService.findAllTodos(TodoQueryStatus.ALL);
+        assertThat(todoResourcesActual.size(), equalTo(todoDomainsExpected.size()));
 
         verify(todoDAO).findAll(any());
         verifyNoMoreInteractions(todoDAO);
@@ -85,7 +82,7 @@ class TodoServiceUnitTest {
 
         when(todoDAO.save(any())).thenReturn(todoDomainExpected);
 
-        TodoDomain todoDomainActual = todoService.saveTodo(todoDomainExpected);
+        TodoDomain todoDomainActual = todoDAO.save(todoDomainExpected);
         assertThat(todoDomainActual.getId(), equalTo(id));
         assertThat(todoDomainActual.getName(), equalTo(todoDomainExpected.getName()));
         assertThat(todoDomainActual.getDescription(), equalTo(todoDomainExpected.getDescription()));

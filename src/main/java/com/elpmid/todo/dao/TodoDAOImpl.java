@@ -7,6 +7,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -50,7 +51,8 @@ public class TodoDAOImpl implements TodoDAO {
     @Override
     @Cacheable(cacheNames = {"todos"}, key = "#todo.id")
     public TodoDomain save(TodoDomain todo) {
-        return todo;
+        throw new DataIntegrityViolationException("");
+        //return todo;
     }
 
     @Override

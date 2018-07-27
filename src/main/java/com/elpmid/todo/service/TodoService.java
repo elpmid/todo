@@ -1,7 +1,10 @@
 package com.elpmid.todo.service;
 
 import com.elpmid.todo.domain.TodoDomain;
+import com.elpmid.todo.dto.TodoCreate;
 import com.elpmid.todo.dto.TodoQueryStatus;
+import com.elpmid.todo.dto.TodoResource;
+import com.elpmid.todo.dto.TodoUpdate;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,11 +12,13 @@ import java.util.UUID;
 
 public interface TodoService {
 
-    List<TodoDomain> findAllTodos(TodoQueryStatus status);
+    List<TodoResource> findAllTodos(TodoQueryStatus status);
 
-    Optional<TodoDomain> findTodoById(UUID id);
+    TodoResource findTodoById(UUID id);
 
-    TodoDomain saveTodo(TodoDomain todoDomain);
+    TodoResource createTodo(TodoCreate todoCreate);
+
+    TodoResource updateTodo(UUID id, TodoUpdate todoUpdate);
 
     void deleteTodoById(UUID id);
 
